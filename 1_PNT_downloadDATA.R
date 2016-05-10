@@ -55,22 +55,31 @@ options(scipen=999) # disable scientific notation
 # Loop to Download files
   for (i in UFlist){
                     file_url <- paste0(ftppath, i, "/",i,"_setores_censitarios.zip")
-                    file_name <- paste0(destfolder,i,"_censustracts.zip")
+                    file_name <- paste0(destfolder,i,".zip")
                     print(i)
                     download.file(file_url, file_name, mode="wb")
                     }
 
-# unzip all Files
-  filenames <- list.files("./census_tracts", pattern=".zip", full.names=TRUE)
-  lapply(filenames,unzip, exdir = "./census_tracts", junkpaths=T)
-  beep() # beep alert
+# unzip all files
   
+  setwd("R:/github/PNT/census_tracts") # temporary change of working Directory
+     
+  # unzip and rename files
+    for (stem in UFlist ) { zf <- paste0(stem,'.zip'); ## derive zip file name
+                            unzip(zf); ## extract all compressed files
+                            files <- unzip(zf,list=T)$Name; ## get their orig names
+                            for (file in files) file.rename(file,paste0(stem,'.',sub('.*\\.','',file))); ## rename
+                            }
+  beep() # beep alert
 
   
   
-  
+# set working Directory
+  setwd("R:/github/PNT")
+
 ########################################################################################
 ######## 2.  ...   -------------------------------------------
+
 
   
   
